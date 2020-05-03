@@ -13,10 +13,6 @@ def load_data(file_path):
 
     return df
 
-correlation_matrix = load_data('data/correlation_matrix.csv')
-correlation_matrix.set_index('goodreads_book_id', inplace=True)
-books_df = load_data('data/books.csv')
-
 def drop_correlated_features(df, threshold=0.99):
     # calculate correlation matrix between columns
     corr_matrix = df.corr()
@@ -32,13 +28,7 @@ def drop_correlated_features(df, threshold=0.99):
 
     return filtered_df
 
-def calculate_correlation_matrix(book_tags, tags_df):
-    # Load data
-    # ratings_df = load_data('data/ratings.csv')
-    books_df = load_data('data/books.csv')
-    tags_df = load_data('data/tags.csv')
-    book_tags = load_data('data/book_tags.csv')
-
+def calculate_correlation_matrix():
     # select only tags used more than 5k times
     tag_counts = pd.merge(book_tags, tags_df, on='tag_id').groupby('tag_id')['count'].sum().sort_values(ascending=False)
     top_tags = tag_counts[tag_counts>5000]
@@ -68,7 +58,7 @@ def save_correlation_matrix(correlation_matrix):
 
 # Function to be called outside
 def find_k_similar_books(goodreads_book_id, n=20):
-    similar_books = correlation_matrix[str(goodreads_book_id)].sort_values(ascending=False).iloc[:n]
+    similar_books = correlation_matrix[int(goodreads_book_id)].sort_values(ascending=False).iloc[:n]
     similar_books.name = 'correlation'
 
     similar_books_merged = pd.merge(similar_books,books_df,left_index=True,right_on='goodreads_book_id')
@@ -86,9 +76,14 @@ def top_books(n=20):
     return books_df.sort_values('average_rating',ascending=False).iloc[:n].to_dict(orient='records')
 
 
-if __name__ == "__main__":
-    correlation_matrix = calculate_correlation_matrix(book_tags,tags_df)
-    save_correlation_matrix(correlation_matrix)
+# Load data
+
+# ratings_df = load_data('data/ratings.csv')
+books_df = load_data('data/books.csv')
+tags_df = load_data('data/tags.csv')
+book_tags = load_data('data/book_tags.csv')
+
+correlation_matrix = calculate_correlation_matrix()
 
 # n = 20
 # goodreads_book_id = 12609433
