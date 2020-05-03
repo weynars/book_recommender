@@ -14,7 +14,6 @@ configparser==3.7.4
 cycler==0.10.0
 decorator==4.4.0
 defusedxml==0.6.0
-drogon-cli==0.1.22
 entrypoints==0.3
 enum34==1.1.6
 funcsigs==1.0.2
