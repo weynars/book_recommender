@@ -33,6 +33,14 @@ def calculate_correlation_matrix():
     tags_df = load_data('data/tags.csv')
     book_tags = load_data('data/book_tags.csv')
 
+    selected_tags = [  236,   240,   248,   251,   254,   261,   272,   509,   617,
+              671,   698,   711,   747,   751,   753,   780,   783,   785,
+              805,   831,   833,   895,   923,   941,  1010,  1078,  1128,
+             1416,  1499,  1540,  1542,  1642,  1659,  1691,  2056,  2271,
+             2305,  2538,  2852,  3371,  3379,  3389,  3392,  4615,  5090,
+             5207,  5481,  7725,  8055,  8517,  8717,  9221, 10093, 10197,
+            10210, 11557, 11590, 11743, 15048, 25149, 25152, 30574, 32586]
+
     # select only tags used more than 5k times
     tag_counts = pd.merge(book_tags, tags_df, on='tag_id').groupby('tag_id')['count'].sum().sort_values(ascending=False)
     top_tags = tag_counts[tag_counts>5000]
@@ -46,7 +54,10 @@ def calculate_correlation_matrix():
     # pivot tables (books x tags)
     pivoted_book_table = grouped_book_tags.pivot('goodreads_book_id','tag_id','count')
 
-    filtered_pivoted_book_table = drop_correlated_features(pivoted_book_table)
+    if selected_tags is not None:
+        filtered_pivoted_book_table = pivoted_book_table[selected_tags]
+    else:
+        filtered_pivoted_book_table = drop_correlated_features(pivoted_book_table)
 
     # change table from count to binary (1 or 0)
     book_tag_table = (filtered_pivoted_book_table>0).astype(int)
