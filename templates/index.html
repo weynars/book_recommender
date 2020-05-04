@@ -14,11 +14,12 @@
 
     <body>
         <div class="header">
-          <h1 class="title"><a href="/"  style="text-decoration: none;">Search Book</a></h1>
+          <h1 class="title"><a href="/">Search a Book</a></h1>
           <form action="{{ url_for('search_book') }}" method="get">
             <input type="text" name="search_field">
             <button id='submit' type="submit">Submit</button>
           </form>
+          <p>And explore similar books to the ones you like</p><br/>
         </div>
 
         <div class="main">

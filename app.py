@@ -42,8 +42,8 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # app.logger.debug('started')
-    books = get_top_books(n=20)
-    return render_template('index.html', books=books)
+    # books = get_top_books(n=20)
+    return render_template('index.html')
 
 @app.route('/search_book', methods=['GET'])
 def search_book():
