@@ -33,6 +33,7 @@ def calculate_correlation_matrix():
     tags_df = load_data('data/tags.csv')
     book_tags = load_data('data/book_tags.csv')
 
+    # 99% corr 
     selected_tags = [  236,   240,   248,   251,   254,   261,   272,   509,   617,
               671,   698,   711,   747,   751,   753,   780,   783,   785,
               805,   831,   833,   895,   923,   941,  1010,  1078,  1128,
@@ -54,16 +55,16 @@ def calculate_correlation_matrix():
     # pivot tables (books x tags)
     pivoted_book_table = grouped_book_tags.pivot('goodreads_book_id','tag_id','count')
 
-    if selected_tags is not None:
-        filtered_pivoted_book_table = pivoted_book_table[selected_tags]
-    else:
-        filtered_pivoted_book_table = drop_correlated_features(pivoted_book_table)
+
+    filtered_pivoted_book_table = pivoted_book_table[selected_tags]
+    # filtered_pivoted_book_table = drop_correlated_features(pivoted_book_table)
 
     # change table from count to binary (1 or 0)
     book_tag_table = (filtered_pivoted_book_table>0).astype(int)
 
     # calculate correlation matrix between books
-    correlation_matrix = book_tag_table.T.corr()
+    correlation_matrix = pd.DataFrame(np.corrcoef(book_tag_table), index=book_tag_table.index\
+                                      , columns=book_tag_table.index)
 
     return correlation_matrix
 
