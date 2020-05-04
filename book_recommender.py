@@ -73,13 +73,11 @@ def save_correlation_matrix(correlation_matrix):
     return True
 
 # Function to be called outside
-def find_k_similar_books(correlation_matrix, goodreads_book_id, n=20):
-    similar_books = correlation_matrix[int(goodreads_book_id)].sort_values(ascending=False).iloc[:n]
-    similar_books.name = 'correlation'
+def find_k_similar_books(goodreads_book_id, n=20):
+    similar_books = list(top_books[str(goodreads_book_id)].iloc[:n])
+    filtered_books_df = books_df[books_df['goodreads_book_id'].isin(similar_books)].copy()
 
-    similar_books_merged = pd.merge(similar_books,books_df,left_index=True,right_on='goodreads_book_id')
-    
-    return similar_books_merged.to_dict(orient='records')
+    return filtered_books_df.to_dict(orient='records')
 
 # seach title or author name
 def book_lookup(search_string, n=20):
@@ -88,10 +86,11 @@ def book_lookup(search_string, n=20):
     return books_df[cond1|cond2].iloc[:n].to_dict(orient='records')
 
 # get top books
-def top_books(n=20):
+def get_top_books(n=20):
     return books_df.sort_values('average_rating',ascending=False).iloc[:n].to_dict(orient='records')
 
 books_df = load_data('data/books.csv')
+top_books = pd.read_csv('data/top_books.csv')
 
 # n = 20
 # goodreads_book_id = 12609433
