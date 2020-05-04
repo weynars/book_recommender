@@ -33,11 +33,11 @@ app = Flask(__name__)
 #     correlation_matrix = calculate_correlation_matrix()
 #     return {"status": True}
 
-# @app.before_first_request
-# def activate_job():
-#     # load_book_recommender.delay()
-#     global correlation_matrix
-#     correlation_matrix = calculate_correlation_matrix()
+@app.before_first_request
+def activate_job():
+    # load_book_recommender.delay()
+    global correlation_matrix
+    correlation_matrix = calculate_correlation_matrix()
 
 @app.route('/')
 def index():
@@ -56,11 +56,11 @@ def search_book():
     filtered_books = book_lookup(search_string, n=20)
     return render_template('index.html', books=filtered_books)
 
-# @app.route('/book_recommendations/<id_goodreads>')
-# def book_recommendations(id_goodreads):
-#     # id_goodreads = request.args.get('id_goodreads')
-#     recommended_books = find_k_similar_books(correlation_matrix, goodreads_book_id=id_goodreads, n=20)
-#     return render_template('index.html', books=recommended_books)
+@app.route('/book_recommendations/<id_goodreads>')
+def book_recommendations(id_goodreads):
+    # id_goodreads = request.args.get('id_goodreads')
+    recommended_books = find_k_similar_books(correlation_matrix, goodreads_book_id=id_goodreads, n=20)
+    return render_template('index.html', books=recommended_books)
 
 
 if __name__ == '__main__':
