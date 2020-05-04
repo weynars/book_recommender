@@ -5,6 +5,11 @@ body {
   color: gray;
   font-weight: 300;
   font-size: 1rem;
+  font-family: "Roboto"
+}
+
+p {
+    color: gray;
 }
 
 .header {
@@ -14,7 +19,6 @@ body {
 
 .header a {
     color: #00909e;
-    text-decoration: none;
 }
 
 .header form {
