@@ -28,7 +28,6 @@
               <img id='book_image' src="{{ book['image_url'] }}"/>
             </a>
             {{ book['title'] }}<br/>
-            <a href="{{ url_for('book_recommendations', id_goodreads=book['goodreads_book_id']) }}">Find Similar Books</a>
           </div>
           {% endfor %}
         </div>
